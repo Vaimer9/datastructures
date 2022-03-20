@@ -1,3 +1,14 @@
+/* 
+ * Singly Linked list implemented by @vaimer9
+ * github: vaimer9
+ * email: vaim3r9@gmail.com
+ *
+ * Just one more thing I spend my time on 
+ * 
+ * All the code here is written by me, when I look for solutions I try looking for the broad problem
+ * rather than the specific solution in context of a linked list
+ */
+
 #include <iostream>
 
 #define NEWNODE (Node<T>*) malloc(sizeof (Node<T>));
@@ -124,7 +135,7 @@ class LinkedList {
         return NULL;
     }
 
-    void *set_nth(int index, T value)
+    int set_nth(int index, T value)
     {
         int i = 1;
         Node<T> *curr = head;
@@ -132,13 +143,16 @@ class LinkedList {
         while ( curr ) {
             if ( i == index ) {
                 curr->val = value;
-                break;
+                return 0;
+
             } else if ( !curr->next )
-                return NULL;
+                return 0;
 
             curr = curr->next;
             i++;
         }
+
+        return 1;
     }
 };
 
