@@ -1,3 +1,4 @@
+#include <cstddef>
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
@@ -16,26 +17,32 @@ class LinkedList {
 
         Node<T> *head;
 
-        LinkedList(T value) {
+        LinkedList()
+        {
             Node<T> *tmp = (Node<T>*) malloc(sizeof (Node<T>));
-            tmp->val = value;
             tmp->next = NULL;
             head = tmp;
         }
 
-        void append(T value) {
-            Node<T> *tmp = (Node<T>*) malloc(sizeof(Node<T>));
-            Node<T> *curr = head;
-            tmp->val = value;
-            tmp->next = NULL;
+        void append(T value)
+        {
+            if ( !head->val ) {
+                head->val = value;
+            } else {
+                Node<T> *tmp = (Node<T>*) malloc(sizeof(Node<T>));
+                Node<T> *curr = head;
+                tmp->val = value;
+                tmp->next = NULL;
 
-            while ( curr->next ) {
-                curr = curr->next;
+                while ( curr->next ) {
+                    curr = curr->next;
+                }
+                curr->next = tmp;
             }
-            curr->next = tmp;
         }
 
-        void debug() {
+        void debug()
+        {
             Node<T> *tmp = head;
 
             printf("[");
@@ -54,22 +61,37 @@ class LinkedList {
             printf("]\n");
         }
 
-        void push(T value) {
-            Node<T> *tmp = (Node<T>*) malloc(sizeof(Node<T>));
-            tmp->val = value;
-            tmp->next = head;
-            head = tmp;
+        void push(T value)
+        {
+            if ( !head->val ) {
+                head->val = value;
+            } else {
+                Node<T> *tmp = (Node<T>*) malloc(sizeof(Node<T>));
+                tmp->val = value;
+                tmp->next = head;
+                head = tmp;
+            }
         }
 
-        void clear() {
-            head = (Node<T>*) malloc(sizeof(Node<T>));
-            head->next = NULL;
+        // Time Complexity : O(n)
+        void clear()
+        {
+            Node<T> *tmp;
+
+            while (head)
+            {
+                tmp = head;
+                head = head->next;
+                free(tmp);
+            }
+            head = NULL;
         }
 };
 
 int main()
 {
-    auto linker = LinkedList<int>(32);
+    LinkedList<int> linker;
+
     linker.append(2);
     linker.append(89);
     linker.push(10);
