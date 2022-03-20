@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <iostream>
 
+using namespace std;
+
 template <typename T>
 struct Node {
     T val;
@@ -10,9 +12,10 @@ struct Node {
 
 template <typename T>
 class LinkedList {
-    private:
-        Node<T> *head;
     public:
+
+        Node<T> *head;
+
         LinkedList(T value) {
             Node<T> *tmp = (Node<T>*) malloc(sizeof (Node<T>));
             tmp->val = value;
@@ -32,12 +35,35 @@ class LinkedList {
             curr->next = tmp;
         }
 
-        void traverse() {
+        void debug() {
             Node<T> *tmp = head;
+
+            printf("[");
             while ( tmp ) {
-                std::cout << tmp->val << std::endl;
+
+                if (tmp->next) {
+                    std::cout << tmp->val << ", ";
+                } else if ( !tmp->val ){
+                    std::cout << "";
+                } else {
+                    std::cout << tmp->val;
+                }
+
                 tmp = tmp->next;
             }
+            printf("]\n");
+        }
+
+        void push(T value) {
+            Node<T> *tmp = (Node<T>*) malloc(sizeof(Node<T>));
+            tmp->val = value;
+            tmp->next = head;
+            head = tmp;
+        }
+
+        void clear() {
+            head = (Node<T>*) malloc(sizeof(Node<T>));
+            head->next = NULL;
         }
 };
 
@@ -46,8 +72,12 @@ int main()
     auto linker = LinkedList<int>(32);
     linker.append(2);
     linker.append(89);
+    linker.push(10);
 
-    linker.traverse();
+    linker.debug();
+
+    linker.clear();
+    linker.debug();
 
     return 0;
 }

@@ -1,3 +1,0 @@
-/home/v9/coding/cpp/linked_list/build/CMakeFiles/main.dir
-/home/v9/coding/cpp/linked_list/build/CMakeFiles/edit_cache.dir
-/home/v9/coding/cpp/linked_list/build/CMakeFiles/rebuild_cache.dir
