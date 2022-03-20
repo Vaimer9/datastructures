@@ -1,6 +1,3 @@
-#include <cstddef>
-#include <stdio.h>
-#include <stdlib.h>
 #include <iostream>
 
 #define NEWNODE (Node<T>*) malloc(sizeof (Node<T>));
@@ -48,7 +45,8 @@ class LinkedList {
 
     void append(T value)
     {
-        if ( !head->val ) {
+        if ( !head ) {
+            head = NEWNODE;
             head->val = value;
         } else {
             Node<T> *tmp = NEWNODE;
@@ -85,7 +83,8 @@ class LinkedList {
 
     void push(T value)
     {
-        if ( !head->val ) {
+        if ( !head ) {
+            head = NEWNODE;
             head->val = value;
         } else {
             Node<T> *tmp = NEWNODE;
@@ -95,9 +94,51 @@ class LinkedList {
         }
     }
     
-    void clear() {
-        clear_elements();
+    void clear()
+    {
+        Node<T> *tmp;
+
+        while (head)
+        {
+            tmp = head;
+            head = head->next;
+            free(tmp);
+        }
+
         head = NULL;
+    }
+
+    T *get_nth(int index)
+    {
+        int i = 1;
+        Node<T> *curr = head;
+
+        while ( curr ) {
+            if ( i == index )
+                return &curr->val;
+
+            curr = curr->next;
+            i++;
+        }
+
+        return NULL;
+    }
+
+    void *set_nth(int index, T value)
+    {
+        int i = 1;
+        Node<T> *curr = head;
+
+        while ( curr ) {
+            if ( i == index ) {
+                curr->val = value;
+                break;
+            } else if ( !curr->next )
+                return NULL;
+
+            curr = curr->next;
+            i++;
+        }
     }
 };
 
@@ -112,6 +153,17 @@ int main()
     linker.debug();
 
     linker.clear();
+    linker.debug();
+
+    linker.append(3);
+    linker.push(32);
+    /* linker.append(881); */
+    linker.debug();
+
+    int *myint = linker.get_nth(1);
+    printf("%d\n", *myint );
+
+    linker.set_nth(2, 23);
     linker.debug();
 
     return 0;
