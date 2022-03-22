@@ -259,7 +259,26 @@ class LinkedList {
         return NULL;
     }
 
-    constexpr T& operator[](std::size_t x) {
+    // Where's the internship FAANG?
+    // I must confess this code is from geeksforgeeks
+    void reverse()
+    {
+        Node<T> *curr = head;
+        Node<T> *prev = NULL, *next = NULL;
+
+        while ( curr )
+        {
+            next = curr->next;
+            curr->next = prev;
+
+            prev = curr;
+            curr = next;
+        }
+        head = prev;
+    }
+
+    constexpr T& operator[](std::size_t x)
+    {
         unsigned long i = 0;
         Node<T> *curr = head;
 
@@ -284,9 +303,11 @@ int main()
     linker.append(74);
     linker.append(31);
     linker.append(90);
+    linker.debug();
+
+    linker.reverse();
+    linker.append(23);
 
     linker.debug();
-    
-    printf("%d\n", linker[4]);
     return 0;
 }
