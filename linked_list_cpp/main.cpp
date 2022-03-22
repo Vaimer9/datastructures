@@ -11,8 +11,6 @@
 
 #include <iostream>
 
-#define NEWNODE (Node<T>*) malloc(sizeof (Node<T>));
-
 using namespace std;
 
 template <typename T>
@@ -24,6 +22,8 @@ struct Node {
 template <typename T>
 class LinkedList {
 
+    Node<T> *head;
+
     private:
 
     void clear_elements()
@@ -34,18 +34,15 @@ class LinkedList {
         {
             tmp = head;
             head = head->next;
-            free(tmp);
+            delete(tmp);
         }
     }
     public:
 
-    Node<T> *head;
 
     LinkedList()
     {
-        Node<T> *tmp = NEWNODE;
-        tmp->next = NULL;
-        head = tmp;
+        head = NULL; 
     }
 
     ~LinkedList()
@@ -57,10 +54,10 @@ class LinkedList {
     void append(T value)
     {
         if ( !head ) {
-            head = NEWNODE;
+            head = new Node<T>;
             head->val = value;
         } else {
-            Node<T> *tmp = NEWNODE;
+            Node<T> *tmp = new Node<T>;
             Node<T> *curr = head;
             tmp->val = value;
             tmp->next = NULL;
@@ -95,10 +92,10 @@ class LinkedList {
     void push(T value)
     {
         if ( !head ) {
-            head = NEWNODE;
+            head = new Node<T>;
             head->val = value;
         } else {
-            Node<T> *tmp = NEWNODE;
+            Node<T> *tmp = new Node<T>;
             tmp->val = value;
             tmp->next = head;
             head = tmp;
@@ -113,7 +110,7 @@ class LinkedList {
         {
             tmp = head;
             head = head->next;
-            free(tmp);
+            delete tmp;
         }
 
         head = NULL;
@@ -135,7 +132,7 @@ class LinkedList {
         return NULL;
     }
 
-    int set_nth(int index, T value)
+    int set_nth(T value, int index)
     {
         int i = 1;
         Node<T> *curr = head;
@@ -154,31 +151,122 @@ class LinkedList {
 
         return 1;
     }
+
+    int pop()
+    {
+        if ( !head ) 
+            return 0;
+        else if ( !head->next )
+            head = NULL;
+
+        Node<T> *curr = head;
+        Node<T> *tmp = new Node<T>;
+
+        while( curr ) {
+
+            if ( !curr->next->next ) {
+                tmp = curr->next;
+                curr->next = NULL;
+                
+                delete tmp;
+
+                break;
+            } else {
+                curr = curr->next;
+            }
+        }
+        return 1;
+    }
+
+    unsigned long length()
+    {
+        unsigned long count = 0;
+        Node<T> *curr = head;
+
+        while ( curr )
+        {
+            count++;
+            curr = curr->next;
+        }
+
+        return count;
+    }
+
+    int insert(T value, unsigned long index)
+    {
+        Node<T> *curr = head;
+        Node<T> *newnode = new Node<T>;
+
+        newnode->val = value;
+        unsigned long i = 1;
+
+        while ( curr )
+        {
+            ++i;
+            if ( i == index ) {
+                newnode->next = curr->next;
+                curr->next = newnode;
+
+                return 1;
+            } else {
+                curr = curr->next;
+            }
+        }
+
+        return 0;
+    }
+
+    int remove(unsigned long index)
+    {
+        Node<T> *curr = head;
+        Node<T> *tmp = new Node<T>;
+        unsigned long i = 0;
+
+        while (curr)
+        {
+            i++;
+            if ( i + 1 == index ) {
+                tmp = curr->next;
+                if (tmp)
+                    curr->next = tmp->next;
+                else
+                    curr->next = NULL;
+
+                delete tmp;
+                return 0;
+            }
+
+            curr = curr->next;
+        }
+        return 1;
+    }
+
+    unsigned long *index(T value)
+    {
+        Node<T> *curr = head;
+        unsigned long *i = new unsigned long;
+        *i = 0;
+
+        while (curr)
+        {
+            (*i)++;
+            if ( curr->val == value )
+                return &*i;
+
+            curr = curr->next;
+        }
+
+        return NULL;
+    }
 };
 
 int main()
 {
     LinkedList<int> linker;
 
-    linker.append(2);
-    linker.append(89);
-    linker.push(10);
-
+    linker.append(21);
+    linker.append(74);
     linker.debug();
-
-    linker.clear();
-    linker.debug();
-
-    linker.append(3);
-    linker.push(32);
-    /* linker.append(881); */
-    linker.debug();
-
-    int *myint = linker.get_nth(1);
-    printf("%d\n", *myint );
-
-    linker.set_nth(2, 23);
-    linker.debug();
-
+    
     return 0;
 }
