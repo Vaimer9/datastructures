@@ -251,12 +251,28 @@ class LinkedList {
         {
             (*i)++;
             if ( curr->val == value )
-                return &*i;
+                return i;
 
             curr = curr->next;
         }
 
         return NULL;
+    }
+
+    constexpr T& operator[](std::size_t x) {
+        unsigned long i = 0;
+        Node<T> *curr = head;
+
+        while ( curr )
+        {
+            if (i == x)
+                return curr->val;
+
+            i++;
+            curr = curr->next;
+        }
+        cout << "Index out of bounds, exiting...";
+        exit(0);
     }
 };
 
@@ -266,7 +282,11 @@ int main()
 
     linker.append(21);
     linker.append(74);
+    linker.append(31);
+    linker.append(90);
+
     linker.debug();
     
+    printf("%d\n", linker[4]);
     return 0;
 }
